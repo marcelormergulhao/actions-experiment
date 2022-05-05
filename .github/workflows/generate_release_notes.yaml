@@ -19,5 +19,5 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.set-current.outputs.CURRENT_TAG }}
-          body: "${{ steps.set-messages.outputs.MESSAGES }}"
+          body: "a really nice body"
           token: ${{ secrets.GITHUB_TOKEN }}
