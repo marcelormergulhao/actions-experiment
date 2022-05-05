@@ -14,10 +14,10 @@ jobs:
         id: set-current
       - run: echo "::set-output name=LAST_TAG::$(git --no-pager tag | sort -r | head -2 | tail -1)"
         id: set-last
-      - run: echo "::set-output name=MESSAGES::$(git --no-pager log ${{ steps.set-last.outputs.LAST_TAG }}..HEAD --format=%s)"
+      - run: echo "::set-output name=MESSAGES::$(git --no-pager log ${{ steps.set-last.outputs.LAST_TAG }}..${{ steps.set-last.outputs.CURRENT_TAG }} --format=%s)"
         id: set-messages
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.set-current.outputs.CURRENT_TAG }}
-          body: ${{ steps.set-messages.outputs.MESSAGES }}
+          body: "${{ steps.set-messages.outputs.MESSAGES }}"
           token: ${{ secrets.GITHUB_TOKEN }}
