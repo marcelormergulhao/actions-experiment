@@ -1,7 +1,8 @@
 name: create-release-notes
 on:
-  create:
-    tags
+  push:
+    tags:
+     - '*'
 jobs:
   create-release-notes:
     runs-on: ubuntu-latest
