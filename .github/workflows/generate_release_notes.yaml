@@ -9,14 +9,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: echo '::set-output name=CURRENT_TAG::$(git --no-pager tag | sort -r | head -1)'
+        id: set-current
       - run: echo '::set-output name=LAST_TAG::$(git --no-pager tag | sort -r | head -2 | tail -1)'
-      - run: echo '::set-output name=MESSAGES::$(git --no-pager log ${{ steps.create-release-notes.outputs.LAST_TAG }}..HEAD --format=%s)'
-      - uses: octokit/request-action@v2.1.0
-        id: create_release_with_messages
+        id: set-last
+      - run: echo '::set-output name=MESSAGES::$(git --no-pager log ${{ steps.set-last.outputs.LAST_TAG }}..HEAD --format=%s)'
+        id: set-messages
+      - uses: ncipollo/release-action@v1
         with:
-          route: POST /repos/{owner}/{repo}/releases
-          owner: marcelormergulhao
-          repo: actions-experiment
-          body: '{"tag_name":"${{ steps.create-release-notes.outputs.CURRENT_TAG }}","name":"${{ steps.create-release-notes.outputs.CURRENT_TAG }}","body":"${{ steps.create-release-notes.outputs.MESSAGES }}"}'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.set-current.outputs.CURRENT_TAG }}
+          body: ${{ steps.set-messages.outputs.MESSAGES }}
+          token: ${{ secrets.GITHUB_TOKEN }}
