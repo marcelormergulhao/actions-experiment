@@ -19,5 +19,5 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.set-current.outputs.CURRENT_TAG }}
-          body: ${{ steps.set-messages.outputs.MESSAGES }}
+          body: ${{ steps.set-last.outputs.LAST_TAG }}
           token: ${{ secrets.GITHUB_TOKEN }}
