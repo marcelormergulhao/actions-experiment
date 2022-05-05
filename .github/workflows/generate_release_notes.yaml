@@ -1,0 +1,20 @@
+name: create-release-notes
+on:
+  create:
+    tags
+jobs:
+  create-release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: export CURRENT_TAG=$(git --no-pager tag | sort -r | head -1 )
+      - run: export LAST_TAG=$(git --no-pager tag | sort -r | head -2 | tail -1)
+      - run: export MESSAGES=$(git --no-pager log ${LAST_TAG}..HEAD --format=%s)
+      - uses: octokit/request-action@v2.1.0
+        id: create_release_with_messages
+        with:
+          route: POST /repos/:repository/releases
+          repository: ${{ github.repository }}
+          body: "{\"tag_name\":\"${CURRENT_TAG}\",\"name\":\"${CURRENT_TAG}\",\"body\":\"${MESSAGES}\"}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
