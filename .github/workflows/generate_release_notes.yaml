@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: echo ""::set-output name=CURRENT_TAG::$(git --no-pager tag | sort -r | head -1)"
+      - run: echo "::set-output name=CURRENT_TAG::$(git --no-pager tag | sort -r | head -1)"
         id: set-current
       - run: echo "::set-output name=LAST_TAG::$(git --no-pager tag | sort -r | head -2 | tail -1)"
         id: set-last
