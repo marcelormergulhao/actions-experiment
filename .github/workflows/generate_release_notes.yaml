@@ -6,6 +6,8 @@ on:
 jobs:
   create-release-notes:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - run: echo "::set-output name=CURRENT_TAG::$(git --no-pager tag | sort -r | head -1)"
